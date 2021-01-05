@@ -16,32 +16,34 @@ namespace TDDTestLibrary
         public Persoon(List<String> voornamen)
         {
             if (voornamen == null)
+                throw new ArgumentNullException();
+
+            if (voornamen.Count <= 0)
                 throw new ArgumentException();
-            if(voornamen.Count<=0)
-                throw new ArgumentException();
-            
-            foreach(var voornaam in voornamen)
-                {
+
+            foreach (var voornaam in voornamen)
+            {
+                if (voornaam == null)
+                    throw new ArgumentNullException();
+
                 if (!regex.IsMatch(voornaam))
                     throw new ArgumentException();
-
-                }
-            if (voornamen.Count != voornamen.Distinct().Count())
-            {
-                    throw new ArgumentException();
-
             }
 
-
+            checkRpeated(voornamen);
             Voornamen = voornamen;
-
-
         }
 
-
-        public override string ToString() 
+        private void checkRpeated(List<string> voornamen)
         {
-            string result="";
+            List<string> lowervoornamen = voornamen.ConvertAll(x => x.ToLower());
+            if (lowervoornamen.Count != lowervoornamen.Distinct().Count())
+                throw new ArgumentException();
+        }
+
+        public override string ToString()
+        {
+            string result = "";
             foreach (var voornaam in Voornamen)
             {
                 if (result != "")
